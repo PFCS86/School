@@ -4,7 +4,7 @@
  * @param $db
  * @param $visitor
  */
-function pageForDirector($db, $visitor)
+function pageForDirector ($db,$visitor)
 {
     if ($visitor['role'] == 'Директор') {
 
