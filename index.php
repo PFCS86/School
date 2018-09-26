@@ -1,16 +1,15 @@
 <?php
 require "db.php";
 
-if(isset($_SESSION['id'] )){
-
-    echo '<div style = "color: orange;">' . "Поздравляю вас, гость! Ваша авторизация прошла успешна!" . '</div><hr>';
-    ?>
-    <p><a href = "/logout.php"> Выйти </a></p>
-
-<?php } else {
-    echo '<div style = "color: orange;">' . "Пройдите авторизацию или зарегестрируйтесь!" . '</div><hr>';
+if (isset($_SESSION['id'])) {
     ?>
 
+    <p style="color: orange; font-family: 'Times New Roman';"> "Поздравляю вас! Ваша авторизация прошла успешна!"</p>
+    <p><a href="/logout.php"> Выйти </a></p>
+
+<?php } else { ?>
+
+    <p style="color: orange; font-family: 'Times New Roman';"> "Пройдите авторизацию или зарегестрируйтесь"</p>
     <a href="/login.php"> Авторизоваться</a>
     <br><a href="/signup.php">Зарегестрироваться</a>
 <?php }
