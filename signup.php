@@ -57,12 +57,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $result = mysqli_query($db, "SELECT id FROM users WHERE login='$login'");
             $id_user = mysqli_fetch_array($result);
 
-            if (!empty($id_user['id'])) {
-                echo '<div style = "color: red;">' . "Введённый вами логин уже существует - введите другой логин!" . '</div><hr>';
-            } else {
-
-                echo '<div style = "color: green;">' . "Вы успешно зарегестрированны! Пройдите на страницу <a href = '/'> авторизации </a> " . '</div><hr>';
-
+            if (!empty($id_user['id'])) { ?>
+                <p style="color: red;">"Введённый Вами логин уже существует - введите другой логин!"</p>
+                <hr>
+            <?php } else { ?>
+                <p style="color: green;">' . "Вы успешно зарегестрированны! Пройдите на страницу <a href='/'>
+                        авторизации </a> " . '</p><hr>';
+                <?php
                 $sql_insert = mysqli_query($db, "INSERT INTO users (login, password, salt , name, role, mail_reg, mail, last_act) 
 VALUES ('$login', '$password','$salt', '$name', '$role', '$mail','$mail','$tm')");
             }
