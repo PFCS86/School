@@ -28,11 +28,10 @@ if (isset($_POST['do_login'])) {
     }
 */
 
-
-$errors = array('login', 'password');
+$errorsOfForm = array('login', 'password');
 
 if (isset ($_POST['do_login'])) {
-    foreach ($errors as $varName) {
+    foreach ($errorsOfForm as $varName) {
         if (isset($_POST[$varName])) {
             if (!empty($_POST[$varName])) {
                 $$varName = $_POST[$varName];
@@ -40,11 +39,12 @@ if (isset ($_POST['do_login'])) {
         }
     }
 
-    foreach ($errors as $varName) {
+    foreach ($errorsOfForm as $varName) {
         if (!isset($$varName)) {
-            echo 'Форма с данными для заполнения ' . $varName . ' - не обнаружена';
+            echo '<div style = "color: red">' . 'Заполните поле: ' . $varName ;
         }
     }
+
 
     $user = mysqli_query($db, "SELECT * FROM users WHERE login = '$login'");
     if (mysqli_num_rows($user) == 1) {
@@ -54,6 +54,7 @@ if (isset ($_POST['do_login'])) {
         if (empty($visitor)) {
             $errors[] = 'Введённый вами login - неверный';
         }
+
 
         if (md5(md5($password) . $visitor['salt']) == $visitor['password']) {
             $_SESSION['id'] = $visitor['id'];
@@ -86,6 +87,10 @@ if (!empty($errors)) {
         echo '<div style = "color: red;">' . $error . '</div><hr>';
     }
 }
+
+echo '<pre>';
+print_r($errors);
+echo '</pre>';
 
 if (isset($_SESSION['id'])) {
 
