@@ -3,7 +3,9 @@ require "db.php";
 require "functions.php";
 require "roles.php";
 
+/*
 $errors = array();
+
 if (isset($_POST['do_login'])) {
 
     if (isset($_POST['login'])) {
@@ -24,6 +26,25 @@ if (isset($_POST['do_login'])) {
         $errors[] = 'Заполните все поля';
 
     }
+*/
+
+$errorsOfForm = array('login', 'password');
+
+if (isset ($_POST['do_login'])) {
+    foreach ($errorsOfForm as $varName) {
+        if (isset($_POST[$varName])) {
+            if (!empty($_POST[$varName])) {
+                $$varName = $_POST[$varName];
+            }
+        }
+    }
+
+    foreach ($errorsOfForm as $varName) {
+        if (!isset($$varName)) {
+            echo '<div style = "color: red">' . 'Заполните поле: ' . $varName ;
+        }
+    }
+
 
     $user = mysqli_query($db, "SELECT * FROM users WHERE login = '$login'");
     if (mysqli_num_rows($user) == 1) {
@@ -34,6 +55,7 @@ if (isset($_POST['do_login'])) {
             $errors[] = 'Введённый вами login - неверный';
         }
 
+
         if (md5(md5($password) . $visitor['salt']) == $visitor['password']) {
             $_SESSION['id'] = $visitor['id'];
 
@@ -42,13 +64,11 @@ if (isset($_POST['do_login'])) {
 
             $result = mysqli_query($db, "SELECT * FROM users WHERE login = '$login'");
 
-            if (mysqli_num_rows($result) > 0)
-            {
+            if (mysqli_num_rows($result) > 0) {
                 while ($check_db = mysqli_fetch_array($result, MYSQLI_NUM)) {
                     mysqli_query($db, "UPDATE users SET counter = counter+1, last_act = NOW() WHERE login = '$login' ");
                 }
-            } else
-            {
+            } else {
                 mysqli_query("INSERT INTO users VALUES ('$_COOKIE[login]',NOW())");
             }
 
@@ -67,6 +87,10 @@ if (!empty($errors)) {
         echo '<div style = "color: red;">' . $error . '</div><hr>';
     }
 }
+
+echo '<pre>';
+print_r($errors);
+echo '</pre>';
 
 if (isset($_SESSION['id'])) {
 
@@ -98,15 +122,13 @@ if (isset($_SESSION['id'])) {
             $rez = mysqli_query($db, "SELECT * FROM users WHERE login='{$_COOKIE['login']}'");
             @$visitor = mysqli_fetch_assoc($rez);
 
-            if (@mysqli_num_rows($rez) == 1 && md5($visitor['login'] . $visitor['password']) == $_COOKIE['password'])
-            {
+            if (@mysqli_num_rows($rez) == 1 && md5($visitor['login'] . $visitor['password']) == $_COOKIE['password']) {
                 $_SESSION['id'] = $visitor['id'];
                 $id = $_SESSION['id'];
 
                 $update_time = mysqli_query($db, "UPDATE users SET last_act = NOW() WHERE id='$id'");
 
-            } else
-            {
+            } else {
                 SetCookie("login", "", time() - 360000, '/');
                 SetCookie("password", "", time() - 360000, '/');
             }
@@ -122,12 +144,12 @@ if (isset($_SESSION['id'])) {
 
     <p>
     <p>Логин:</p>
-    <input id="login" type="text" name="login" value='<?php echo @$data['login']; ?>'>
+    <input id="login" type="text" name="login" value="<?php echo @$data['login']; ?>">
     </p>
 
     <p>
     <p>Пароль:</p>
-    <input id="pass" type="password" name="password" value='<?php echo @$data['password']; ?>'>
+    <input id="pass" type="password" name="password" value="<?php echo @$data['login']; ?>">
     </p>
 
     <p>
